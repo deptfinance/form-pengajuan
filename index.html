@@ -407,7 +407,7 @@
         <label>Nama Item / Barang <span class="req">*</span></label>
         <input type="text" id="p-item" placeholder="Contoh: Laptop Dell Inspiron 15">
       </div>
-      <div class="row-3">
+      <div class="row-2">
         <div class="field">
           <label>Jumlah <span class="req">*</span></label>
           <input type="number" id="p-jumlah" placeholder="1" min="1">
@@ -416,10 +416,10 @@
           <label>Harga Satuan (Rp) <span class="req">*</span></label>
           <input type="number" id="p-harga" placeholder="500000" min="0">
         </div>
-        <div class="field">
-          <label>Total (Rp)</label>
-          <input type="text" id="p-total" placeholder="0" readonly style="background:#F5F4F0;color:var(--text-muted);">
-        </div>
+      </div>
+      <div class="field">
+        <label>Total (Rp)</label>
+        <input type="text" id="p-total" placeholder="Otomatis terhitung" readonly style="background:#F5F4F0;color:var(--text-muted);cursor:default;">
       </div>
       <div class="field">
         <label>Nama Vendor / Toko <span class="req">*</span></label>
@@ -536,13 +536,19 @@
       const totalEl  = document.getElementById('p-total');
 
       function hitungTotal() {
-        const j = parseInt(jumlahEl.value) || 0;
-        const h = parseInt(hargaEl.value)  || 0;
-        totalEl.value = j && h ? (j * h).toLocaleString('id-ID') : '';
+        const j = parseFloat(jumlahEl.value) || 0;
+        const h = parseFloat(hargaEl.value)  || 0;
+        if (j > 0 && h > 0) {
+          totalEl.value = 'Rp ' + (j * h).toLocaleString('id-ID');
+        } else {
+          totalEl.value = '';
+        }
       }
 
       jumlahEl.addEventListener('input', hitungTotal);
+      jumlahEl.addEventListener('change', hitungTotal);
       hargaEl.addEventListener('input', hitungTotal);
+      hargaEl.addEventListener('change', hitungTotal);
 
       // Set default tanggal hari ini
       const today = new Date().toISOString().split('T')[0];
@@ -605,15 +611,27 @@
       const alasan  = getVal('p-alasan');
 
       if (!nama || !dept || !tanggal || !item || !jumlah || !harga || !vendor || !alasan) {
-        alert('Harap lengkapi semua field yang wajib diisi (*).');
+        const kosong = [];
+        if (!nama)    kosong.push('Nama Lengkap');
+        if (!dept)    kosong.push('Departemen');
+        if (!tanggal) kosong.push('Tanggal Pengajuan');
+        if (!item)    kosong.push('Nama Item');
+        if (!jumlah)  kosong.push('Jumlah');
+        if (!harga)   kosong.push('Harga Satuan');
+        if (!vendor)  kosong.push('Nama Vendor');
+        if (!alasan)  kosong.push('Alasan Pengajuan');
+        alert('Field belum diisi: ' + kosong.join(', '));
         return;
       }
+
+      const j = parseInt(jumlah) || 0;
+      const h = parseInt(harga)  || 0;
 
       const payload = {
         jenis_form: 'Pengajuan Pembelian',
         nama, departemen: dept, tanggal_pengajuan: tanggal,
         nama_item: item, jumlah, harga_satuan: harga,
-        total: (parseInt(jumlah) * parseInt(harga)).toString(),
+        total: (j * h).toString(),
         vendor, alasan
       };
 
