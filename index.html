@@ -132,13 +132,37 @@
         <select id="p-dept">
           <option value="">-- Pilih --</option>
           <option>Finance</option><option>Penagihan</option><option>Berkas</option>
-          <option>Akad</option><option>Marketing</option><option>Agensi</option>
+          <option>Akad</option><option>Marketing 2Loan</option><option>Marketing 3Loan</option><option>Agensi</option>
         </select>
       </div>
     </div>
     <div class="field">
       <label>Tanggal Pengajuan <span class="req">*</span></label>
       <input type="date" id="p-tanggal">
+    </div>
+
+    <div class="field">
+      <label>Penanggung Jawab <span class="req">*</span></label>
+      <input type="text" id="p-pj" placeholder="Isi nama ketua / penanggung jawab">
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Keperluan <span class="req">*</span></label>
+        <select id="p-keperluan">
+          <option value="">-- Pilih --</option>
+          <option>Staff Baru</option>
+          <option>Staff Lama</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Prioritas <span class="req">*</span></label>
+        <select id="p-prioritas">
+          <option value="">-- Pilih --</option>
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+        </select>
+      </div>
     </div>
 
     <div class="section-label">Detail Item</div>
@@ -173,7 +197,7 @@
 
     <div class="section-label">Lampiran</div>
     <div class="field">
-      <label>Upload Foto / Dokumen <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
+      <label>Foto / Dokumen 1 <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
       <div class="upload-area" id="upload-area-p">
         <input type="file" id="p-foto" accept="image/*,.pdf" onchange="handleFileChange('p-foto','upload-area-p','filename-p')">
         <div class="upload-default">
@@ -182,6 +206,18 @@
           <div class="upload-hint">JPG, PNG, PDF — maks. 5MB</div>
         </div>
         <div class="upload-filename" id="filename-p"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Foto / Dokumen 2 <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
+      <div class="upload-area" id="upload-area-p2">
+        <input type="file" id="p-foto2" accept="image/*,.pdf" onchange="handleFileChange('p-foto2','upload-area-p2','filename-p2')">
+        <div class="upload-default">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text"><strong>Klik untuk pilih file</strong> atau drag & drop</div>
+          <div class="upload-hint">JPG, PNG, PDF — maks. 5MB</div>
+        </div>
+        <div class="upload-filename" id="filename-p2"></div>
       </div>
     </div>
 
@@ -215,7 +251,7 @@
         <select id="r-dept">
           <option value="">-- Pilih --</option>
           <option>Finance</option><option>Penagihan</option><option>Berkas</option>
-          <option>Akad</option><option>Marketing</option><option>Agensi</option>
+          <option>Akad</option><option>Marketing 2Loan</option><option>Marketing 3Loan</option><option>Agensi</option>
         </select>
       </div>
     </div>
@@ -254,7 +290,7 @@
 
     <div class="section-label">Lampiran</div>
     <div class="field">
-      <label>Upload Bukti Pembayaran <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
+      <label>Bukti Pembayaran 1 <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
       <div class="upload-area" id="upload-area-r">
         <input type="file" id="r-foto" accept="image/*,.pdf" onchange="handleFileChange('r-foto','upload-area-r','filename-r')">
         <div class="upload-default">
@@ -263,6 +299,18 @@
           <div class="upload-hint">JPG, PNG, PDF — maks. 5MB</div>
         </div>
         <div class="upload-filename" id="filename-r"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Bukti Pembayaran 2 <span style="font-weight:400;color:var(--text-hint);">(opsional)</span></label>
+      <div class="upload-area" id="upload-area-r2">
+        <input type="file" id="r-foto2" accept="image/*,.pdf" onchange="handleFileChange('r-foto2','upload-area-r2','filename-r2')">
+        <div class="upload-default">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text"><strong>Klik untuk pilih file</strong> atau drag & drop</div>
+          <div class="upload-hint">JPG, PNG, PDF — maks. 5MB</div>
+        </div>
+        <div class="upload-filename" id="filename-r2"></div>
       </div>
     </div>
 
@@ -276,7 +324,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPESaImKunlNx9ANykcb9ctg_lhef3g6eCHa4pEQ7xC-VXhxpOxNWdwessx9fZb821/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzX5enzXqsatmzftvN0E2JbbPY0WmlkF0DVdkvGeDF7JFqlbfnRNuytq3KnmUdf7e_N/exec";
 
   function showForm(name) {
     document.getElementById('placeholder').style.display = 'none';
@@ -375,18 +423,24 @@
   async function submitPembelian() {
     const nama    = getVal('p-nama');
     const dept    = getVal('p-dept');
-    const tanggal = getVal('p-tanggal');
+    const tanggal    = getVal('p-tanggal');
+    const pj         = getVal('p-pj');
+    const keperluan  = getVal('p-keperluan');
+    const prioritas  = getVal('p-prioritas');
     const item    = getVal('p-item');
     const jumlah  = getVal('p-jumlah');
     const harga   = getVal('p-harga');
     const vendor  = getVal('p-vendor');
     const alasan  = getVal('p-alasan');
 
-    if (!nama || !dept || !tanggal || !item || !jumlah || !harga || !vendor || !alasan) {
+    if (!nama || !dept || !tanggal || !pj || !keperluan || !prioritas || !item || !jumlah || !harga || !vendor || !alasan) {
       const kosong = [];
       if (!nama)    kosong.push('Nama Lengkap');
       if (!dept)    kosong.push('Departemen');
-      if (!tanggal) kosong.push('Tanggal Pengajuan');
+      if (!tanggal)    kosong.push('Tanggal Pengajuan');
+      if (!pj)         kosong.push('Penanggung Jawab');
+      if (!keperluan)  kosong.push('Keperluan');
+      if (!prioritas)  kosong.push('Prioritas');
       if (!item)    kosong.push('Nama Item');
       if (!jumlah)  kosong.push('Jumlah');
       if (!harga)   kosong.push('Harga Satuan');
@@ -401,14 +455,20 @@
     const payload = {
       jenis_form: 'Pengajuan Pembelian',
       nama, departemen: dept, tanggal_pengajuan: tanggal,
+      penanggung_jawab: pj, keperluan, prioritas,
       nama_item: item, jumlah, harga_satuan: harga,
       total: (j * h).toString(), vendor, alasan,
-      file_name: '', file_type: '', file_base64: ''
+      file_name: '', file_type: '', file_base64: '',
+      file_name2: '', file_type2: '', file_base64_2: ''
     };
 
     const fotoFile = document.getElementById('p-foto').files[0];
     if (fotoFile) {
       try { payload.file_base64 = await fileToBase64(fotoFile); payload.file_name = fotoFile.name; payload.file_type = fotoFile.type; } catch(e) {}
+    }
+    const fotoFile2 = document.getElementById('p-foto2').files[0];
+    if (fotoFile2) {
+      try { payload.file_base64_2 = await fileToBase64(fotoFile2); payload.file_name2 = fotoFile2.name; payload.file_type2 = fotoFile2.type; } catch(e) {}
     }
     sendData(payload, 'btn-pembelian', 'alert-pembelian-ok', 'alert-pembelian-err', 'tab-pembelian');
   }
@@ -440,12 +500,17 @@
       nama, departemen: dept, jenis_bank: bank,
       no_rekening: rekening, tanggal_pengeluaran: tanggal,
       nominal, keterangan,
-      file_name: '', file_type: '', file_base64: ''
+      file_name: '', file_type: '', file_base64: '',
+      file_name2: '', file_type2: '', file_base64_2: ''
     };
 
     const fotoFile = document.getElementById('r-foto').files[0];
     if (fotoFile) {
       try { payload.file_base64 = await fileToBase64(fotoFile); payload.file_name = fotoFile.name; payload.file_type = fotoFile.type; } catch(e) {}
+    }
+    const fotoFile2 = document.getElementById('r-foto2').files[0];
+    if (fotoFile2) {
+      try { payload.file_base64_2 = await fileToBase64(fotoFile2); payload.file_name2 = fotoFile2.name; payload.file_type2 = fotoFile2.type; } catch(e) {}
     }
     sendData(payload, 'btn-reimburse', 'alert-reimburse-ok', 'alert-reimburse-err', 'tab-reimburse');
   }
