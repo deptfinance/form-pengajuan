@@ -75,6 +75,12 @@
     .alert.show { display: block; animation: fadeUp 0.3s ease; }
     .placeholder-state { padding: 32px 28px; text-align: center; color: var(--text-hint); font-size: 14px; display: block; }
     .placeholder-state svg { width: 32px; height: 32px; stroke: var(--text-hint); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto 10px; display: block; }
+    .download-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 11px 16px; margin-bottom: 20px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
+    .download-btn:hover { background: #EFEDE8; border-color: var(--border-focus); }
+    .download-btn svg { width: 18px; height: 18px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .download-btn .dl-info { flex: 1; }
+    .download-btn .dl-label { color: var(--text); }
+    .download-btn .dl-size { font-size: 11px; color: var(--text-hint); margin-left: 6px; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 480px) { .row-2 { grid-template-columns: 1fr; } .form-panel { padding: 20px 18px 28px; } .type-selector { padding: 16px 18px 0; } }
@@ -137,7 +143,7 @@
       </div>
     </div>
     <div class="field">
-      <label>Tanggal Pembelian <span class="req">*</span></label>
+      <label>Tanggal Pengajuan <span class="req">*</span></label>
       <input type="date" id="p-tanggal">
     </div>
     <div class="field">
@@ -239,6 +245,11 @@
         <li>Pengajuan reimburse diproses dalam <strong>1-2 hari kerja</strong>.</li>
       </ul>
     </div>
+
+    <a href="format_reimburse.xlsx" download class="download-btn">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="dl-info"><span class="dl-label">Unduh Template Format Reimburse</span><span class="dl-size">(.xlsx)</span></span>
+    </a>
 
     <div class="section-label">Identitas Pengajuan</div>
     <div class="row-2">
