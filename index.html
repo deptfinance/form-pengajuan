@@ -75,7 +75,9 @@
     .alert.show { display: block; animation: fadeUp 0.3s ease; }
     .placeholder-state { padding: 32px 28px; text-align: center; color: var(--text-hint); font-size: 14px; display: block; }
     .placeholder-state svg { width: 32px; height: 32px; stroke: var(--text-hint); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto 10px; display: block; }
-    .download-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 11px 16px; margin-bottom: 20px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
+    .download-list { display: grid; gap: 8px; margin-bottom: 20px; }
+    .download-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 11px 16px; margin: 0; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s, border-color 0.15s, opacity 0.15s; text-decoration: none; text-align: left; }
+    .download-btn:disabled { opacity: 0.65; cursor: wait; }
     .download-btn:hover { background: #EFEDE8; border-color: var(--border-focus); }
     .download-btn svg { width: 18px; height: 18px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
     .download-btn .dl-info { flex: 1; }
@@ -248,10 +250,16 @@
       </ul>
     </div>
 
-    <a href="format_reimburse.xlsx" download class="download-btn">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      <span class="dl-info"><span class="dl-label">Unduh Template Format Reimburse</span><span class="dl-size">(.xlsx)</span></span>
-    </a>
+    <div class="download-list">
+      <button type="button" class="download-btn" onclick="downloadTemplate('format_reimburse.xlsx', 'format_reimburse.xlsx', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="dl-info"><span class="dl-label">Unduh Template Format Reimburse</span><span class="dl-size">(.xlsx)</span></span>
+      </button>
+      <button type="button" class="download-btn" onclick="downloadTemplate('format_dinas.xlsx', 'format_dinas.xlsx', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="dl-info"><span class="dl-label">Unduh Template Format Dinas</span><span class="dl-size">(.xlsx)</span></span>
+      </button>
+    </div>
 
     <div class="section-label">Identitas Pengajuan</div>
     <div class="row-2">
@@ -340,6 +348,30 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzX5enzXqsatmzftvN0E2JbbPY0WmlkF0DVdkvGeDF7JFqlbfnRNuytq3KnmUdf7e_N/exec";
+
+  async function downloadTemplate(fileUrl, fileName, button) {
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    try {
+      const response = await fetch(fileUrl, { cache: 'no-store' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = fileName;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    } catch (err) {
+      alert('File gagal diunduh. Silakan muat ulang halaman dan coba lagi.');
+    } finally {
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+    }
+  }
 
   function showForm(name) {
     document.getElementById('placeholder').style.display = 'none';
